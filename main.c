@@ -14,14 +14,18 @@ void calcula_cant_info(float prob[],float info[], int n);
 float cant_info(float info[], int n);
 float entropia(float info[],float prob[],int n);
 float sumatoria_columna(float prob_cond[][4], int col);
-void matriz_prob_cond(float prob_cond[][4]);
+void genera_matriz_prob_cond(float prob_cond[][4]);
 void muestraMat(float prob[][4]);
 void cant_info_simbolo(float info[], int n, int codigo);
+void decabin (int n, int cont, int cant_bits) ;
+
 
 int inecuacion_KRAFT_binaria(int longitud, int q);
 float longitud_media(int longitud, int q, float vec[]);
 float rendimiento(float entropia, float longitud);
 float redundancia(float entropia, float longitud);
+
+void solucion(float prob[][4], int tam);
 
 int main()
 {
@@ -65,8 +69,9 @@ int main()
     printf("La entropia de la fuente en el escenario 3 es %4.5f bits\n",entropia9);
     printf("-------------------------------------------------------------------------\n");
 
-    matriz_prob_cond(prob_condicionales);
+    genera_matriz_prob_cond(prob_condicionales);
     muestraMat(prob_condicionales);
+    solucion(prob_condicionales,4);
     printf("-------------------------------------------------------------------------\n");
 
 
@@ -106,7 +111,7 @@ int main()
     return 0;
 }
 
-void matriz_prob_cond(float prob_cond[][4])
+void genera_matriz_prob_cond(float prob_cond[][4])
 {
     int ant, num; char cad[3];
     float totalColumna;
@@ -270,4 +275,104 @@ void decabin (int n, int cont, int cant_bits) {
             printf("0");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+void solucion(float prob[][4], int tam){
+
+    int res,i,j,k,m;
+    float col_pivote,x,mat[5][6]={0}; //"mat" tiene una columna de mas ya que es donde se almacenaran los resultados de la cada incognita
+
+
+    for(i=0;i<tam;i++){ //almacena  en mat ---> prob - identidad
+        for(j=0;j<tam;j++){
+            mat[i][j] = prob[i][j];
+            if(i==j)
+                mat[i][j]--;
+        }
+    }
+
+
+
+
+    for(j=0;j<tam+2;j++){ //agrega en la ultima fila la ecuacion restante (sumatoria igual a 1)
+        if(j!=tam)
+            mat[tam][j]=1;
+    }
+
+    tam++; //al agregar la ecuacion de sumatoria igual a 1 se incrementa el tamaño de la matriz
+
+
+    for(i=0;i<tam;i++)
+    {
+        res=0;m=i;
+        while(res==0)
+        {
+           if((mat[m][i]>0.0000001)||((mat[m][i]<-0.0000001)) )
+                res=1;
+            else
+                m++;
+        }
+
+        col_pivote=mat[m][i];
+
+        for(j=0;j<(tam+1);j++)
+        {
+            x=mat[m][j];
+            mat[m][j]=mat[i][j];
+            mat[i][j]=x/col_pivote;
+        }
+
+        for(k=i+1;k<tam;k++)
+        {
+            x=mat[k][i];
+            for(j=i;j<(tam+1);j++)
+                mat[k][j]=mat[k][j]-x*mat[i][j];
+        }
+
+    }
+
+    for(i=tam-1;i>=0;i--)
+        for(j=(i-1);j>=0;j--)
+        {
+            mat[j][tam]=mat[j][tam]-mat[j][i]*mat[i][tam];
+            mat[j][i]=0;
+        }
+
+
+
+    printf("\n\n\nSolucion:\n");
+    for(i=0;i<tam-1;i++)
+        printf("\n X%d=%f\n",i+1,mat[i][tam]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
