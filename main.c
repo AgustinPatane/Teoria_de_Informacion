@@ -747,3 +747,8 @@ void escribe_Archivo(char cad_aux[], int longSimbolo, TTT vector[], int n)
     fclose(escribir);
 
 }
+
+
+
+
+
