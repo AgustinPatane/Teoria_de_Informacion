@@ -2,15 +2,19 @@ package modelo;
 
 import interf.LecturaEscrituraArch;
 
-
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class Diccionario implements LecturaEscrituraArch {
+   
    private HashMap<Character,ElementoDiccionario> tablaCodigo = new HashMap<>();
+   private ArrayList<Simbolo> simbolos = new ArrayList<>();
    private long cantElem=0;
+   
+   
    public void agregaPalabra(PalabraCodigo palabraCodigo){
       if(!tablaCodigo.containsKey(palabraCodigo.getSimboloMensaje()))
          tablaCodigo.put(palabraCodigo.getSimboloMensaje(),new ElementoDiccionario(palabraCodigo));
@@ -51,17 +55,7 @@ public class Diccionario implements LecturaEscrituraArch {
    public void escribeArchivo(String path) {
 
    }
-   public void muestraPalyProb(){
-      Iterator <ElementoDiccionario> it = tablaCodigo.values().iterator();
-      ElementoDiccionario elementoDiccionario;
-      while(it.hasNext()){
-         elementoDiccionario=it.next();
-         System.out.println("Caracter: "+
-                 elementoDiccionario.getPalabraCodigo().getSimboloMensaje()
-                 +" numero de apariciones: "
-                 +elementoDiccionario.getNroDeAparicion() + " Prob de aparicion "+elementoDiccionario.calculaProb(cantElem));
-      }
-   }
+
 
    public long getcantElem(){
       return cantElem;
@@ -77,4 +71,13 @@ public class Diccionario implements LecturaEscrituraArch {
       }
       return  acu;
    }
+
+
+
+   public HashMap<Character, ElementoDiccionario> getTablaCodigo() {
+	   return tablaCodigo;
+   }
+   
+   
+   
 }

@@ -13,6 +13,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" />
         </processorPath>
         <module name="compresion" />
+        <module name="Teoria_de_Informacion-main" />
       </profile>
     </annotationProcessing>
   </component>

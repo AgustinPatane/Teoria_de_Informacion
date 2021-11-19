@@ -2,7 +2,7 @@ package modelo;
 
 public class PalabraCodigo {
     private char simboloMensaje;
-    private int codigo;
+    private int codigo; //ver si se usa
     
     public char getSimboloMensaje() {
 		return simboloMensaje;
