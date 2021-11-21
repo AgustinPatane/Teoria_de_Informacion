@@ -3,6 +3,7 @@ package modelo;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public abstract class Compresor {
@@ -61,7 +62,7 @@ public abstract class Compresor {
 			
 			 System.out.println("Simbolo        Probabilidad      Codigo");
 			 for(int i=0; i<simbolos.size();i++) {
-				 System.out.println(simbolos.get(i).getCaracter() + "     "+simbolos.get(i).getProbabilidad()+ "       "+simbolos.get(i).getCodigo());
+				 System.out.println("   " +simbolos.get(i).getCaracter() + "             "+new DecimalFormat("#.###").format(simbolos.get(i).getProbabilidad())+ "                "+simbolos.get(i).getCodigo());
 			  }	
 		}
 	 

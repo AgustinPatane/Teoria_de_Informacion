@@ -11,7 +11,7 @@ public class Prueba {
     public static void main(String[] args) {
 
         Diccionario diccionario = new Diccionario();
-        diccionario.leeArchivo("src/main/resources/files/Argentina.txt");
+        diccionario.leeArchivo("src/main/resources/files/imagen.raw");
         System.out.println("Cantidad de caracteres: "+diccionario.getcantElem());
         System.out.println("Suma de probabilidades: "+diccionario.sumProb());
 
@@ -22,9 +22,22 @@ public class Prueba {
         Compresor c1 = new Shanon(diccionario.getTablaCodigo(), diccionario.getcantElem());
         c1.generaCodificacion();
         c1.muestraCodificacion();
-        c1.comprimeArchivo("src/main/resources/files/Argentina.txt","src/main/resources/files/Argentina.Fan");
+        c1.comprimeArchivo("src/main/resources/files/imagen.raw","src/main/resources/files/imagen.Fan");
 
 
+        float suma=0;
+        for(int i=0;i<c1.getSimbolos().size();i++) {
+            suma+=c1.getSimbolos().get(i).getProbabilidad()*Util.log2(1/c1.getSimbolos().get(i).getProbabilidad());
+        }
+
+        System.out.println("ENTROPIA:  "+suma);
+
+
+        suma=0;
+        for(int i=0;i<c1.getSimbolos().size();i++) {
+            suma+=c1.getSimbolos().get(i).getProbabilidad()*c1.getSimbolos().get(i).getCodigo().length();
+        }
+        System.out.println("LONGITUD MEDIA - SHANNON  "+suma);
 
         System.out.println("CODIFICACION CON HUFFMAN");
         Compresor c2 = new Huffman(diccionario.getTablaCodigo(),diccionario.getcantElem());
@@ -45,8 +58,12 @@ public class Prueba {
 
         c2.setSimbolos(simbolosOriginal);
         c2.muestraCodificacion();
-        c2.comprimeArchivo("src/main/resources/files/Argentina.txt","src/main/resources/files/Argentina.Huf");
-
+        c2.comprimeArchivo("src/main/resources/files/imagen.raw","src/main/resources/files/imagen.Huf");
+        suma=0;
+        for(int i=0;i<c2.getSimbolos().size();i++) {
+            suma+=c1.getSimbolos().get(i).getProbabilidad()*c2.getSimbolos().get(i).getCodigo().length();
+        }
+        System.out.println("LONGITUD MEDIA HUFFMAN:  "+suma);
 
 
         Rlc rlc = new Rlc();
