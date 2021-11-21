@@ -48,7 +48,7 @@ public class Huffman extends Compresor{
 	    	  aux[i] = new Simbolo();
 	      
 
-	      System.out.println(aux[n-1].getCaracter()); 
+	      //System.out.println(aux[n-1].getCaracter());
 	      aux[n-1].setCodigo(simbolos.get(pos).getCodigo());
 
 	      aux[n-2].setCodigo(simbolos.get(pos).getCodigo());

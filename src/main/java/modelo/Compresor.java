@@ -1,10 +1,9 @@
 package modelo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public abstract class Compresor {
 
@@ -20,12 +19,17 @@ public abstract class Compresor {
 		this.cantidadDeElementos=cantidadDeElementos;
 		this.creaYOrdena();
 	}
-	 
-	 
-	 
-	 
-	 
-	 private void creaYOrdena(){
+
+
+	public ArrayList<Simbolo> getSimbolos() {
+		return simbolos;
+	}
+
+	public void setSimbolos(ArrayList<Simbolo> simbolos) {
+		this.simbolos = simbolos;
+	}
+
+	private void creaYOrdena(){
 		   
 		  int i,j;
 		  Simbolo s;
@@ -64,5 +68,61 @@ public abstract class Compresor {
 	 
 	 
 	 public abstract void generaCodificacion();
-	
+	public void comprimeArchivo(String path,String newPath){
+		File file = new File(path);
+		if(simbolos.size()==0)
+			System.out.println("Primero debe tener los elementos codificados");
+		else {
+			try {
+				FileReader fileReader = new FileReader(path);
+				FileOutputStream fileOutputStream =new FileOutputStream(newPath);
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(Byte.BYTES);
+				ByteBuffer byteBuffer=ByteBuffer.allocate(Byte.BYTES);
+				int i;
+				char caracter;
+				byte b=0;
+				byte [] byteArray,byteArrayWrite;
+				int bits_libres=8;
+				while ((i=fileReader.read())!=-1){
+					caracter=(char)i;
+					Iterator<Simbolo> it =simbolos.iterator();
+					Simbolo simbolo=it.next();
+					while(it.hasNext() && simbolo.getCaracter()!=caracter) {
+						simbolo=it.next();
+					}
+						byteArray=simbolo.getCodigo().getBytes(StandardCharsets.UTF_8);
+						for(int k=0;k<byteArray.length;k++){
+							if(bits_libres==0){
+								byteBuffer.put(b);
+								//byteArrayWrite=byteBuffer.array();
+								byteArrayOutputStream.write(b);
+								byteBuffer.clear();
+								bits_libres=8;
+								b=0;
+							}
+							if(byteArray[k]==49)
+								b= (byte) (b|1<<bits_libres-1);
+							bits_libres--;
+						}
+					}
+				if(bits_libres!=8){
+					byteBuffer.put(b);
+					byteArrayWrite=byteBuffer.array();
+					byteArrayOutputStream.write(byteArrayWrite);
+				}
+				byteArrayOutputStream.writeTo(fileOutputStream);
+				byteArrayOutputStream.flush();
+				byteArrayOutputStream.close();
+				fileOutputStream.flush();
+				fileOutputStream.close();
+				fileReader.close();
+				} catch (FileNotFoundException e) {
+				e.printStackTrace();
+
+				} catch (IOException e) {
+				System.out.println("Error al intentar escribir arhivo");
+			}
+
+		}
+	}
 }

@@ -39,10 +39,10 @@ public class Diccionario implements LecturaEscrituraArch {
          FileReader fileReader = new FileReader(path);
          int i;
          while((i=fileReader.read())!=-1){
-            PalabraCodigo palabraCodigo = new PalabraCodigo();
-            palabraCodigo.setSimboloMensaje((char)i);
-            palabraCodigo.setCodigo(palabraCodigo.devuelveBin());
-            agregaPalabra(palabraCodigo);
+                  PalabraCodigo palabraCodigo = new PalabraCodigo();
+                  palabraCodigo.setSimboloMensaje((char) i);
+                  palabraCodigo.setCodigo(palabraCodigo.devuelveBin());
+                  agregaPalabra(palabraCodigo);
          }
          fileReader.close();
 

@@ -14,6 +14,48 @@ public class Rlc implements LecturaEscrituraArch {
 
     }
 
+
+    public void leeyEscribeTxt(String path){
+        byte [] b;
+        short cont=0;
+        short carAnt;
+        short carAct;
+        char ch;
+        int i;
+        try {
+            FileReader fileReader = new FileReader(path);
+            String ruta=path.replaceFirst("[.][a-zA-Z]+$",".rlc");
+            File fileWrite = new File(ruta);
+            FileOutputStream fileOutputStream =new FileOutputStream(fileWrite);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(5);
+            byteArrayOutputStream.reset();
+            ByteBuffer byteBuffer;
+            byteBuffer =ByteBuffer.allocate(Character.BYTES+Short.BYTES);
+            carAnt=(short)fileReader.read();
+            while(carAnt!=-1){
+                do{
+                    cont++;
+                    carAct=(short)fileReader.read();
+                } while(carAct==carAnt);
+                byteBuffer.putChar((char)carAnt);
+                byteBuffer.putShort(cont);
+                b=byteBuffer.array();
+                byteArrayOutputStream.write(b);
+                byteBuffer.clear();
+                cont=0;
+                carAnt=carAct;
+            }
+            byteArrayOutputStream.writeTo(fileOutputStream);
+            byteArrayOutputStream.flush();
+            byteArrayOutputStream.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println("Error en escritura de archivo");
+        }
+    }
+
     public void leeYEscribeRaw(String path) {
         int cont=0;
         byte numAnt;
@@ -22,7 +64,7 @@ public class Rlc implements LecturaEscrituraArch {
         try {
             File file =new File(path);
             Scanner scanner =new Scanner(file);
-            String ruta=path.replaceFirst("[.][a-zA-Z]+$",".rlc");
+            String ruta=path.replaceFirst("[.][a-zA-Z]+$",".RLC");
             File fileWrite = new File(ruta);
             FileOutputStream fileOutputStream =new FileOutputStream(fileWrite);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(5);
@@ -59,7 +101,6 @@ public class Rlc implements LecturaEscrituraArch {
         } catch (IOException e) {
             System.out.println("Error en escritura de archivo");
         }
-
     }
 
     @Override
